@@ -1,7 +1,13 @@
 package com.ericsson.ntf.ref.intf;
 
-/**
- * Created by prajena on 9/9/2016.
- */
+import com.ericsson.ntf.common.message.CustomerRecord;
+
 public interface NtfPersonalizationIntf {
+    /**
+     *
+     * @param subscriberId
+     * @param contractId
+     * @return
+     */
+    CustomerRecord getCustomerRecord(String subscriberId, String contractId);
 }

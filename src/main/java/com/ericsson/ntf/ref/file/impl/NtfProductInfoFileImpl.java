@@ -19,17 +19,25 @@ public class NtfProductInfoFileImpl implements NtfProductInfoIntf {
     public static final String PRODUCT_NAME_COLUMN_NAME = "productName";
     public static final String BUCKET_ID_COLUMN_NAME = "bucketSpecId";
     public static final String BUCKET_NAME_COLUMN_NAME = "bucketName";
+    public static final String THRESHOLD_ID_COLUMN_NAME = "thresholdSpecId";
+    public static final String THRESHOLD_NAME_COLUMN_NAME = "thresholdName";
 
     private static Logger logger = LoggerFactory.getLogger(NtfPersistenceFileImpl.class);
 
     private static final String PRODUCT_FILE_PATH = "C:\\Users\\prajena\\Downloads\\Dheeraj_files\\coba.product.csv";
     private static final String BUCKET_FILE_PATH = "C:\\Users\\prajena\\Downloads\\Dheeraj_files\\coba.bucket.csv";
+    private static final String THRESHOLD_FILE_PATH = "C:\\Users\\prajena\\Downloads\\Dheeraj_files\\coba.threshold.csv";
 
     private CellProcessor[] productInfoCellProcessor = new CellProcessor[]{
             new NotNull(), // column value must not null in CSV file
             new NotNull() // column value must not null in CSV file
     };
     private CellProcessor[] bucketCellProcessor = new CellProcessor[]{
+            new NotNull(), // column value must not null in CSV file
+            new NotNull() // column value must not null in CSV file
+    };
+    private CellProcessor[] thresholdCellProcessor = new CellProcessor[]{
+            new NotNull(), // column value must not null in CSV file
             new NotNull(), // column value must not null in CSV file
             new NotNull() // column value must not null in CSV file
     };
@@ -84,7 +92,28 @@ public class NtfProductInfoFileImpl implements NtfProductInfoIntf {
 
     @Override
     public String getThresholdName(String bucketSpecId, String thresholdSpecId) {
-        return null;
+        if (bucketSpecId == null || bucketSpecId.length() == 0 || thresholdSpecId == null || thresholdSpecId.length() == 0) {
+            return null;
+        }
+
+        String thresholdName = null;
+        CsvMapReader thresholdMapReader = null;
+        try {
+            thresholdMapReader = new CsvMapReader(new FileReader(THRESHOLD_FILE_PATH), CsvPreference.STANDARD_PREFERENCE);
+            String[] header = thresholdMapReader.getHeader(true);
+            Map<String, Object> thresholdInfo = null;
+            while ((thresholdInfo = thresholdMapReader.read(header, thresholdCellProcessor)) != null) {
+                if (bucketSpecId.equals(thresholdInfo.get(BUCKET_ID_COLUMN_NAME)) && thresholdSpecId.equals(thresholdInfo.get(THRESHOLD_ID_COLUMN_NAME))) {
+                    return (String) thresholdInfo.get(THRESHOLD_NAME_COLUMN_NAME);
+                }
+            }
+        } catch (IOException e) {
+            logger.error("Error while processing file " + e.getMessage());
+        } finally {
+            closeReader(thresholdMapReader);
+        }
+
+        return thresholdName;
     }
 
     private void closeReader(ICsvReader beanReader) {

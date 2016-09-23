@@ -1,0 +1,3 @@
+uom,measure,scaleFactorNum,scaleFactorDenoExp,baseUnitFlag,symbol
+aa,dollars,100,1000,true,$
+bb,dollars111,300,1000,false,RS

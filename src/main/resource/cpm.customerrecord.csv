@@ -1,0 +1,3 @@
+subscriberId,contractId,language,notifyFlag,startTime,endTime,channel,email,timeZone,msisdn,partyNameATitle,partyNameFamPrefix,partyNameFamily,partyNameFormOfAddress,partyNameFormatted,partyNameGiven,partyNamePrefGiven,partyNameQualifications,partyNameMiddle
+sub1,cont1,english,True,1200,1300,22,xxx@ericsson.com,EST,12742,Mr,Sir,Bush,Home,format1,John,JOHN,Manager,Elias
+sub2,cont2,Spanish,False,0800,0900,87,yyy@ericsson.com,IST,12744,Ms,Miss,Barack,Office,format2,Barack,BARACK,President,Hussain

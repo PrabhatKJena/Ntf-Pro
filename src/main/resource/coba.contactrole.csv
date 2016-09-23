@@ -1,0 +1,6 @@
+ContactRole,description
+Notification,Notification Contact
+Main,The main contact of the customer
+Shipment,Shipment contact
+Billing,Billing contact
+Mailing,Mailing contact

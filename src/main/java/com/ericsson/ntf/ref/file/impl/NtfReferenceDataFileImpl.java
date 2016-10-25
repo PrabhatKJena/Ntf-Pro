@@ -1,10 +1,10 @@
 package com.ericsson.ntf.ref.file.impl;
 
-import com.ericsson.ntf.ref.data.tblentities.NtfContactRole;
-import com.ericsson.ntf.ref.data.tblentities.NtfContactType;
-import com.ericsson.ntf.ref.data.tblentities.NtfLanguage;
-import com.ericsson.ntf.ref.data.tblentities.NtfUnitOfMeasurement;
-import com.ericsson.ntf.ref.intf.NtfReferenceDataIntf;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.supercsv.cellprocessor.ParseBool;
@@ -16,37 +16,48 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.io.ICsvReader;
 import org.supercsv.prefs.CsvPreference;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.ericsson.ntf.ref.data.tblentities.NtfContactRole;
+import com.ericsson.ntf.ref.data.tblentities.NtfContactType;
+import com.ericsson.ntf.ref.data.tblentities.NtfLanguage;
+import com.ericsson.ntf.ref.data.tblentities.NtfUnitOfMeasurement;
+import com.ericsson.ntf.ref.intf.NtfReferenceDataIntf;
 
 public class NtfReferenceDataFileImpl implements NtfReferenceDataIntf {
     private static Logger logger = LoggerFactory.getLogger(NtfPersistenceFileImpl.class);
 
-    private static final String LANG_FILE_PATH = "C:\\Users\\prajena\\Downloads\\Dheeraj_files\\coba.language.csv";
-    private static final String UOM_FILE_PATH = "C:\\Users\\prajena\\Downloads\\Dheeraj_files\\coba.unitofmeasurement.csv";
-    private static final String CONTACT_TYPE_PATH = "C:\\Users\\prajena\\Downloads\\Dheeraj_files\\coba.contacttype.csv";
-    private static final String CONTACT_ROLE_PATH = "C:\\Users\\prajena\\Downloads\\Dheeraj_files\\coba.contactrole.csv";
+    private static final String LANG_FILE_PATH = "/opt/ntf/latest/conf/coba.language.csv";
+    private static final String UOM_FILE_PATH = "/opt/ntf/latest/conf/coba.unitofmeasurement.csv";
+    private static final String CONTACT_TYPE_PATH = "/opt/ntf/latest/conf/coba.contacttype.csv";
+    private static final String CONTACT_ROLE_PATH = "/opt/ntf/latest/conf/coba.contactrole.csv";
 
-    private CellProcessor[] langCellProcessor = new CellProcessor[]{
+    private CellProcessor[] langCellProcessor = new CellProcessor[]{new NotNull(), // column value
+            // must not
+            // null in CSV
+            // file
             new NotNull(), // column value must not null in CSV file
             new NotNull() // column value must not null in CSV file
     };
-    private CellProcessor[] uomCellProcessor = new CellProcessor[]{
-            new NotNull(),
-            new NotNull(),
+    private CellProcessor[] uomCellProcessor = new CellProcessor[]{new NotNull(), new NotNull(), new NotNull(),
             new ParseLong(), // for Long data from CSV
             new ParseLong(new NotNull()), // for Long data from CSV
             new ParseBool(new NotNull()), // for Boolean data from CSV
-            new NotNull()
-    };
-    private CellProcessor[] contactTypeCellProcessor = new CellProcessor[]{
-            new NotNull(), // column value must required in CSV file
+            new NotNull()};
+    private CellProcessor[] contactTypeCellProcessor = new CellProcessor[]{new NotNull(), // column
+            // value
+            // must
+            // required
+            // in
+            // CSV
+            // file
             new NotNull() // column value must required in CSV file
     };
-    private CellProcessor[] contactRoleCellProcessor = new CellProcessor[]{
-            new NotNull(), // column value must required in CSV file
+    private CellProcessor[] contactRoleCellProcessor = new CellProcessor[]{new NotNull(), // column
+            // value
+            // must
+            // required
+            // in
+            // CSV
+            // file
             new NotNull() // column value must required in CSV file
     };
 
@@ -54,7 +65,7 @@ public class NtfReferenceDataFileImpl implements NtfReferenceDataIntf {
     private List<NtfUnitOfMeasurement> ntfUnitOfMeasurementList;
 
     @Override
-    public List<NtfLanguage> getLanguages() {
+    public List<NtfLanguage> getLanguageList() {
         if (ntfLanguageList != null && ntfLanguageList.size() > 0)
             return ntfLanguageList;
 
@@ -86,7 +97,8 @@ public class NtfReferenceDataFileImpl implements NtfReferenceDataIntf {
             uomBeanReader = new CsvBeanReader(new FileReader(UOM_FILE_PATH), CsvPreference.STANDARD_PREFERENCE);
             String[] header = uomBeanReader.getHeader(true);
             NtfUnitOfMeasurement measurementBean = null;
-            while ((measurementBean = uomBeanReader.read(NtfUnitOfMeasurement.class, header, uomCellProcessor)) != null) {
+            while ((measurementBean = uomBeanReader.read(NtfUnitOfMeasurement.class, header,
+                    uomCellProcessor)) != null) {
                 ntfUnitOfMeasurementList.add(measurementBean);
             }
         } catch (IOException e) {
@@ -114,14 +126,16 @@ public class NtfReferenceDataFileImpl implements NtfReferenceDataIntf {
 
     @Override
     public String getContactTypeKey(String contactTypeName) {
-        if (contactTypeName == null && contactTypeName.length() == 0)
+        if (contactTypeName == null || contactTypeName.length() == 0)
             return null;
         ICsvBeanReader contactTypeBeanReader = null;
         try {
-            contactTypeBeanReader = new CsvBeanReader(new FileReader(CONTACT_TYPE_PATH), CsvPreference.STANDARD_PREFERENCE);
+            contactTypeBeanReader = new CsvBeanReader(new FileReader(CONTACT_TYPE_PATH),
+                    CsvPreference.STANDARD_PREFERENCE);
             String[] header = contactTypeBeanReader.getHeader(true);
             NtfContactType ntfContactType = null;
-            while ((ntfContactType = contactTypeBeanReader.read(NtfContactType.class, header, contactTypeCellProcessor)) != null) {
+            while ((ntfContactType = contactTypeBeanReader.read(NtfContactType.class, header,
+                    contactTypeCellProcessor)) != null) {
                 if (contactTypeName.equals(ntfContactType.getDescription())) {
                     return ntfContactType.getContactType();
                 }
@@ -136,15 +150,17 @@ public class NtfReferenceDataFileImpl implements NtfReferenceDataIntf {
 
     @Override
     public String getContactRoleKey(String contactRoleName) {
-        if (contactRoleName == null && contactRoleName.length() == 0)
+        if (contactRoleName == null || contactRoleName.length() == 0)
             return null;
 
         ICsvBeanReader contactRoleBeanReader = null;
         try {
-            contactRoleBeanReader = new CsvBeanReader(new FileReader(CONTACT_ROLE_PATH), CsvPreference.STANDARD_PREFERENCE);
+            contactRoleBeanReader = new CsvBeanReader(new FileReader(CONTACT_ROLE_PATH),
+                    CsvPreference.STANDARD_PREFERENCE);
             String[] header = contactRoleBeanReader.getHeader(true);
             NtfContactRole ntfContactRole = null;
-            while ((ntfContactRole = contactRoleBeanReader.read(NtfContactRole.class, header, contactRoleCellProcessor)) != null) {
+            while ((ntfContactRole = contactRoleBeanReader.read(NtfContactRole.class, header,
+                    contactRoleCellProcessor)) != null) {
                 if (contactRoleName.equals(ntfContactRole.getDescription())) {
                     return ntfContactRole.getContactRole();
                 }

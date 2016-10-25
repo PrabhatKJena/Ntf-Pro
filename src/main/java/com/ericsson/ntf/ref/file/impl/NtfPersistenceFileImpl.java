@@ -22,7 +22,7 @@ public class NtfPersistenceFileImpl implements NtfPersistenceIntf {
 
     @Override
     public NtfReferenceDataIntf getReferenceData() {
-        return new NtfReferenceDataFileImpl();
+        return new NtfReferenceDataFileImplV2();
     }
 
     @Override

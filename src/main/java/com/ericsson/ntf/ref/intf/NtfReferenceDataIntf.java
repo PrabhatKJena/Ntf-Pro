@@ -1,9 +1,9 @@
 package com.ericsson.ntf.ref.intf;
 
+import java.util.List;
+
 import com.ericsson.ntf.ref.data.tblentities.NtfLanguage;
 import com.ericsson.ntf.ref.data.tblentities.NtfUnitOfMeasurement;
-
-import java.util.List;
 
 public interface NtfReferenceDataIntf {
 	
@@ -12,7 +12,7 @@ public interface NtfReferenceDataIntf {
 	 * 
 	 * @return: List<NtfLanguage>
 	 */
-    List<NtfLanguage> getLanguages();
+    List<NtfLanguage> getLanguageList();
     
     /**
      * Get a list of unit of measurements

@@ -1,6 +1,5 @@
 package com.ericsson.ntf.ref.file.impl;
 
-import com.ericsson.ntf.ref.data.tblentities.NtfLanguage;
 import com.ericsson.ntf.ref.data.tblentities.NtfUnitOfMeasurement;
 import com.ericsson.ntf.ref.intf.NtfPersistenceIntf;
 import com.ericsson.ntf.ref.intf.NtfReferenceDataIntf;
@@ -13,7 +12,7 @@ public class NtfReferenceDataFileImplTest {
         NtfReferenceDataIntf referenceData = persistenceIntf.getReferenceData();
 
         // Test getLanguage()
-        fetchLanguageData(referenceData);
+//        fetchLanguageData(referenceData);
         // Test getUnitOfMesaurment
         fetchMesurementData(referenceData);
 
@@ -25,7 +24,7 @@ public class NtfReferenceDataFileImplTest {
 
         System.out.println("----Afrcte clearing cache ------");
         referenceData.clearCache();
-        fetchLanguageData(referenceData);
+//        fetchLanguageData(referenceData);
         fetchMesurementData(referenceData);
 
     }
@@ -38,12 +37,12 @@ public class NtfReferenceDataFileImplTest {
         }
     }
 
-    private static void fetchLanguageData(NtfReferenceDataIntf referenceData) {
+   /* private static void fetchLanguageData(NtfReferenceDataIntf referenceData) {
         List<NtfLanguage> languages = referenceData.getLanguages();
         System.out.println(">>>> List of NtfLanguage");
         for (NtfLanguage language : languages) {
             System.out.println(language);
         }
-    }
+    }*/
 
 }
